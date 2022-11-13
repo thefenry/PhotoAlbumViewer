@@ -1,6 +1,6 @@
 ﻿namespace PhotoAlbumViewer.Models
 {
-    internal class AlbumContent
+    public class AlbumContent
     {
         public int AlbumId { get; set; }
 

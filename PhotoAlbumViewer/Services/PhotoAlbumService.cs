@@ -3,13 +3,25 @@ using PhotoAlbumViewer.Models;
 
 namespace PhotoAlbumViewer.Services
 {
-    internal class PhotoAlbumService : IPhotoAlbumService
+    public class PhotoAlbumService : IPhotoAlbumService
     {
+        private readonly IDataClient _dataClient;
+
+        public PhotoAlbumService(IDataClient dataClient)
+        {
+            _dataClient = dataClient;
+        }
+
         public async Task<List<AlbumContent>> GetAlbumInfo(int albumId)
         {
+            if (albumId < 1)
+            {
+                return null;
+            }
+
             string requestUri = $"https://jsonplaceholder.typicode.com/photos?albumId={albumId}";
 
-            return await DataClient.GetData<List<AlbumContent>>(requestUri);
+            return await _dataClient.GetData<List<AlbumContent>>(requestUri);
         }
 
         public void PrintData(IList<AlbumContent> albumPhotos)
@@ -18,10 +30,12 @@ namespace PhotoAlbumViewer.Services
             {
                 Console.WriteLine($"[{albumPhoto.Id}] {albumPhoto.Title}");
             }
+
+            Console.WriteLine("\n");
         }
     }
 
-    internal interface IPhotoAlbumService
+    public interface IPhotoAlbumService
     {
         /// <summary>
         /// Gets the Album photos for the selected AlbumId

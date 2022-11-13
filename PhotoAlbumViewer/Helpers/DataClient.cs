@@ -2,16 +2,22 @@
 
 namespace PhotoAlbumViewer.Helpers
 {
-    public static class DataClient
+    public sealed class DataClient : IDataClient
     {
-        private static readonly HttpClient _httpClient = new();
+        private static DataClient _instance;
 
-        public static async Task<T> GetData<T>(string requestUri)
+        private static readonly HttpClient HttpClient = new();
+
+        public static DataClient Instance
         {
+            get { return _instance ??= new DataClient(); }
+        }
 
+        public async Task<T> GetData<T>(string requestUri)
+        {
             try
             {
-                var responseMessage = await _httpClient.GetStringAsync(requestUri);
+                var responseMessage = await HttpClient.GetStringAsync(requestUri);
 
                 if (string.IsNullOrWhiteSpace(responseMessage))
                 {
@@ -29,5 +35,10 @@ namespace PhotoAlbumViewer.Helpers
                 return default;
             }
         }
+    }
+
+    public interface IDataClient
+    {
+        Task<T> GetData<T>(string requestUri);
     }
 }

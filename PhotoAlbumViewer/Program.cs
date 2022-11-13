@@ -1,4 +1,5 @@
-﻿using PhotoAlbumViewer.Services;
+﻿using PhotoAlbumViewer.Helpers;
+using PhotoAlbumViewer.Services;
 using System.Text.RegularExpressions;
 
 namespace PhotoAlbumViewer
@@ -7,9 +8,9 @@ namespace PhotoAlbumViewer
     {
         private static PhotoAlbumService _photoAlbumService;
 
-        static async Task Main()
+        private static async Task Main()
         {
-            _photoAlbumService = new PhotoAlbumService();
+            _photoAlbumService = new PhotoAlbumService(DataClient.Instance);
 
             bool exitProgram = false;
 
